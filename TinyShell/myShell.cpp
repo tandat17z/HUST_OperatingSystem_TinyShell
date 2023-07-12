@@ -222,7 +222,7 @@ void runable(string command)
 		else
 		{
 			printf("Illegal command!\n");
-        command.append(" -> Illegal command");
+            command.append(" -> Illegal command");
 		}
 		
 	}
@@ -234,14 +234,14 @@ void runable(string command)
 	
 	else if(eList[0].compare("rmdir") == 0 && eList.size() == 2){
 		string folderPath;
-		if(eList[0].find(":\\") != std::string::npos)
+		if(eList[1].find(":\\") != std::string::npos)
 			folderPath = eList[1];
 		else
 			folderPath = currentDirectory + "\\" + eList[1];
 		rm_dir(folderPath);
 	}
 	
-	else if(eList[0].compare("color") == 0 && eList.size() == 2){
+	else if(eList[0].compare("color") == 0 && eList.size() <= 2){
 		if(eList.size() == 1)
 			colortext("white");
 		else

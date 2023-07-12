@@ -102,7 +102,7 @@ void help(){
     cout << left << "9.  mkdir"
     	 << "create a new directory within the current working directory \n";
 	cout.width(20);
-    cout << left << "10.  rmdir"
+    cout << left << "10. rmdir"
     	 << "remove an directory from the system. \n";
     cout.width(20);
     cout << left << "11. wordpad"

@@ -1,2 +1,4 @@
 color red
-clock
+date
+color
+list
