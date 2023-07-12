@@ -28,7 +28,6 @@ void runable(string command)
     void time1();
     void date();
     void time2();
-	vector<string> error;
 	
     if (command.compare("help") == 0)
     {
@@ -78,11 +77,15 @@ void runable(string command)
 	    	printf("Hello, wordpad is running\n");
 			openInBackOrFore(command_, "C:/Program Files/Windows NT/Accessories/wordpad.exe"); //C:/Windows/System32/calc.exe
 		}
-	    else
-	    	error.push_back(eList[0]);
+		else
+		{
+			printf("Illegal command!\n");
+        	command.append(" -> Illegal command");
+		}
+			
     }
 
-    else if (eList[0].compare("dir") == 0)
+    else if (eList[0].compare("dir") == 0 && eList.size() <= 2)
     {
     	if(eList.size() == 1)
         	listOfCurrent();//system("dir")
@@ -128,7 +131,6 @@ void runable(string command)
 
     else if (command.compare("list") == 0)
     {
-
         list1();
     }
 
@@ -145,10 +147,13 @@ void runable(string command)
         	cd(s);
 		}
 		else
-			error.push_back(eList[0]);
+		{
+			printf("Illegal command!\n");
+        	command.append(" -> Illegal command");
+		}
     }
 
-    else if (eList[0].compare("kill") == 0)
+    else if (eList[0].compare("kill") == 0 && eList.size() == 2)
     {
         if (eList[1].compare("-1") == 0)
         {
@@ -156,10 +161,8 @@ void runable(string command)
         }
         else
         {
-        	for( int i = 1 ; i < eList.size(); i++){
-	            string s = eList[i];
-	            kill(s);
-	        }
+			string s = eList[1];
+	        kill(s);
         }
         
     }
@@ -174,20 +177,13 @@ void runable(string command)
         resume(s); 
     }
 
-//    else if (eList[0].find(".bat") != std::string::npos) {
-//    	string s = currentDirectory + "\\" + command;
-//    	runBat(s);
-//    }
-
-    else if (command[0] == 'e' && command[1] == 'n' && command[2] == 'v'){
-    	if (command[3] == '\0') {
+    else if (eList[0].compare("env") == 0 && eList.size() <= 2){
+    	if (eList.size() == 1) {
     		read_env(NULL);
 		}
-		else {
-			char envname[command.length() - 4];
-			for (int i = 4; i <= command.length(); i ++) {
-				envname[i - 4] = command[i];
-			}
+		else 
+		{
+			char * envname = (char *) eList[1].c_str();
 			read_env(envname);
 		}
 	}
@@ -198,47 +194,14 @@ void runable(string command)
 		add_env(name, value);
 	}
 	
-//    else if (command.find("addenv (") != std::string::npos){
-//		int a;
-//		int b = 1;
-//		for (int i = 8; i< command.length(); i++){
-//			if(command[i] == '(') b ++;
-//			if(command[i] == ')') b --;
-//			if(b == 0) {
-//				a = i + 2;
-//				break;
-//			}
-//		}
-//		if(b > 0) {
-//			cout << "Syntax error\n";
-//		}
-//		else {
-//			if (command[a - 1] == ' ') {
-//				char envname[a - 9];
-//				char envvalue[command.length() - a + 1];
-//				for (int i = 8; i < a - 2; i++){
-//					envname[i - 8] = command[i];
-//				}
-//				envname[a - 10] = '\0';
-//				for (int i = a; i <= command.length(); i ++){
-//					envvalue[i-a] = command[i];
-//				}
-//				add_env(envname, envvalue);
-//			}
-//			else {
-//				cout << "Illegal command!\n";
-//			}
-//		}
-//	}
-
-	else if (eList[0].compare("delenv") == 0){
-		char *envname = (char *)eList[1].c_str();
+	else if (eList[0].compare("delenv") == 0 && eList.size() == 2){
+		char *envname = (char *) eList[1].c_str();
 		del_env(envname);
 	}
 	
 	else if( eList[0].compare("run") == 0)
 	{
-		if (eList[1].find(".exe") != std::string::npos &&
+		if  ( eList[1].find(".exe") != std::string::npos &&
 			( eList.size() == 2 ||
 			( eList.size() == 3 && (eList[2].compare("back") || eList[2].compare("fore"))))) {
     		if( eList.size() == 2)
@@ -248,7 +211,7 @@ void runable(string command)
     		runExe(command);
     	}
     	
-    	if (eList[1].find(".bat") != std::string::npos){
+    	else if (eList[1].find(".bat") != std::string::npos && eList.size() == 2){
     		string s;
     		if( eList[1].find(":") != std::string::npos)
     			s = eList[1];
@@ -256,29 +219,29 @@ void runable(string command)
 				s = currentDirectory + "\\" + eList[1];
     		runBat(s);
 		}
+		else
+		{
+			printf("Illegal command!\n");
+        command.append(" -> Illegal command");
+		}
+		
 	}
-	
-//    else if (eList[0].find(".exe") != std::string::npos &&
-//			( eList.size() == 1 ||
-//			( eList.size() == 2 && (eList[1].compare("back") || eList[1].compare("fore"))))) {
-//    	if( eList.size() == 1)
-//    		command = eList[0] + " fore";
-//    	else
-//    		command = eList[0] + " " + eList[1];
-//    	runExe(command);
-//    }
-    
+
 	else if(eList[0].compare("mkdir") == 0 && eList.size() == 2){
 		string folderName = eList[1];
 		mk_dir(folderName);
 	}
 	
 	else if(eList[0].compare("rmdir") == 0 && eList.size() == 2){
-		string folderPath = currentDirectory + "\\" + eList[1];
+		string folderPath;
+		if(eList[0].find(":\\") != std::string::npos)
+			folderPath = eList[1];
+		else
+			folderPath = currentDirectory + "\\" + eList[1];
 		rm_dir(folderPath);
 	}
 	
-	else if(eList[0].compare("color") == 0){
+	else if(eList[0].compare("color") == 0 && eList.size() == 2){
 		if(eList.size() == 1)
 			colortext("white");
 		else
@@ -310,28 +273,13 @@ int main()
 {
     WELCOME(); // message
     string command;
-    char *buffer1 = _getcwd(NULL, 0);// get current working directory
-    int i = 0;
-    
-    while(buffer1[i] != '\0') {
-        currentDirectory += buffer1[i];
-        i++;
-    }
-    
+//    char *buffer1 = _getcwd(NULL, 0);// get current working directory
+//    currentDirectory = buffer1;
+//    
     while (true)
     {
     	char *buffer = _getcwd(NULL, 0);
-        //char *getcwd(char *buf, size_t size);
-        /*char cwd[PATH_MAX];
-   if (getcwd(cwd, sizeof(cwd)) != NULL) {
-       printf("Current working dir: %s\n", cwd);
-       */
-        currentDirectory = "";
-        int i = 0;
-	    while(buffer[i] != '\0') {
-	        currentDirectory += buffer[i];
-	        i++;
-	    }
+        currentDirectory = buffer;
 	    
     	printf("%s", buffer); cout << ">";
         getline(cin, command);
